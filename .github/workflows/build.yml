@@ -1,0 +1,28 @@
+name: Build Wii DOL
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install devkitPPC
+        uses: devkitPro/actions/devkitpro-install@v1
+        with:
+          toolchains: devkitPPC
+
+      - name: Build
+        run: |
+          make
+          mkdir output
+          cp boot.dol output/
+
+      - name: Upload DOL
+        uses: actions/upload-artifact@v3
+        with:
+          name: boot-dol
+          path: output/boot.dol
